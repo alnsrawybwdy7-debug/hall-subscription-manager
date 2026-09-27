@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Subscription, SubscriptionFormData } from './types';
+import type { Subscription, SubscriptionFormData } from './types';
 import { cn } from './lib/utils';
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
     };
 
     if (editingId) {
-      setSubscriptions(subs.map(sub => sub.id === editingId ? newSubscription : sub));
+      setSubscriptions(subscriptions.map(sub => sub.id === editingId ? newSubscription : sub));
     } else {
       setSubscriptions([...subscriptions, newSubscription]);
     }
