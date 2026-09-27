@@ -8,7 +8,6 @@ function App() {
       id: '1',
       name: 'أحمد محمد',
       phone: '0771234567',
-      email: 'ahmed@example.com',
       startDate: new Date('2024-01-01'),
       endDate: new Date('2024-04-01'),
       plan: 'quarterly',
@@ -20,7 +19,6 @@ function App() {
       id: '2',
       name: 'فاطمة علي',
       phone: '0789876543',
-      email: 'fatima@example.com',
       startDate: new Date('2024-02-15'),
       endDate: new Date('2024-03-15'),
       plan: 'monthly',
@@ -35,7 +33,6 @@ function App() {
   const [formData, setFormData] = useState<SubscriptionFormData>({
     name: '',
     phone: '',
-    email: '',
     startDate: '',
     endDate: '',
     plan: 'monthly',
@@ -53,7 +50,6 @@ function App() {
       id: editingId || Date.now().toString(),
       name: formData.name,
       phone: formData.phone,
-      email: formData.email,
       startDate: new Date(formData.startDate),
       endDate: new Date(formData.endDate),
       plan: formData.plan,
@@ -73,7 +69,6 @@ function App() {
     setFormData({
       name: '',
       phone: '',
-      email: '',
       startDate: '',
       endDate: '',
       plan: 'monthly',
@@ -86,7 +81,6 @@ function App() {
     setFormData({
       name: subscription.name,
       phone: subscription.phone,
-      email: subscription.email,
       startDate: subscription.startDate.toISOString().split('T')[0],
       endDate: subscription.endDate.toISOString().split('T')[0],
       plan: subscription.plan,
@@ -105,8 +99,7 @@ function App() {
 
   const filteredSubscriptions = subscriptions.filter(sub => {
     const matchesSearch = sub.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         sub.phone.includes(searchTerm) ||
-                         sub.email.toLowerCase().includes(searchTerm.toLowerCase());
+                         sub.phone.includes(searchTerm);
     const matchesFilter = filterStatus === 'all' || sub.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -124,7 +117,7 @@ function App() {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ar-IQ', { style: 'currency', currency: 'IQD' }).format(amount);
+    return new Intl.NumberFormat('ar-IQ', { style: 'currency', currency: 'IQD', maximumFractionDigits: 0 }).format(amount);
   };
 
   const getStatusColor = (status: string) => {
@@ -162,10 +155,10 @@ function App() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-                نظام إدارة اشتراكات القاعة
+                VIP GYM
               </h1>
               <p className="text-slate-600 dark:text-slate-400">
-                إدارة سهلة وفعالة لجميع اشتراكات القاعة
+                نظام إدارة اشتراكات القاعة
               </p>
             </div>
             <button
@@ -174,7 +167,6 @@ function App() {
                 setFormData({
                   name: '',
                   phone: '',
-                  email: '',
                   startDate: '',
                   endDate: '',
                   plan: 'monthly',
@@ -273,7 +265,7 @@ function App() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="بحث بالاسم، الهاتف، أو البريد الإلكتروني..."
+                  placeholder="بحث بالاسم أو الهاتف..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-3 pr-12 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -334,18 +326,6 @@ function App() {
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      البريد الإلكتروني *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     />
                   </div>
@@ -444,7 +424,6 @@ function App() {
                 <tr>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">الاسم</th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">الهاتف</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">البريد الإلكتروني</th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">نوع الاشتراك</th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">تاريخ البداية</th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-700 dark:text-slate-300">تاريخ النهاية</th>
@@ -456,7 +435,7 @@ function App() {
               <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                 {filteredSubscriptions.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                    <td colSpan={8} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                       <svg className="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                       </svg>
@@ -472,9 +451,6 @@ function App() {
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {subscription.phone}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
-                        {subscription.email}
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                         {getPlanText(subscription.plan)}

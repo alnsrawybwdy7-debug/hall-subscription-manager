@@ -2,7 +2,6 @@ export interface Subscription {
   id: string;
   name: string;
   phone: string;
-  email: string;
   startDate: Date;
   endDate: Date;
   plan: 'monthly' | 'quarterly' | 'yearly';
@@ -14,7 +13,6 @@ export interface Subscription {
 export interface SubscriptionFormData {
   name: string;
   phone: string;
-  email: string;
   startDate: string;
   endDate: string;
   plan: 'monthly' | 'quarterly' | 'yearly';
